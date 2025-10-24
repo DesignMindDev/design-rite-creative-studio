@@ -127,10 +127,11 @@ async function publishToBlog(content: any, options: any) {
 
   } catch (error) {
     console.error('Blog publishing error:', error)
+    const errorMessage = error instanceof Error ? error.message : String(error)
     return {
       platform: 'blog',
       success: false,
-      error: error.message,
+      error: errorMessage,
       message: 'Failed to publish to blog'
     }
   }
@@ -170,10 +171,11 @@ async function publishToSocial(content: any) {
 
   } catch (error) {
     console.error('Social media publishing error:', error)
+    const errorMessage = error instanceof Error ? error.message : String(error)
     return {
       platform: 'social_media',
       success: false,
-      error: error.message,
+      error: errorMessage,
       message: 'Failed to publish to social media'
     }
   }
