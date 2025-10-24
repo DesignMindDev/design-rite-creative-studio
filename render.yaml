@@ -1,0 +1,167 @@
+# Render.com Blueprint for Design-Rite Creative Studio
+# This service provides creative asset generation and management
+# Part of the Design-Rite Corporation ecosystem
+
+services:
+  # Design-Rite Creative Studio - Next.js 15 Web Service
+  - type: web
+    name: design-rite-creative-studio
+    runtime: node
+    region: oregon # oregon, ohio, frankfurt, or singapore
+    plan: free # Start with free tier, upgrade as needed
+
+    # Build configuration
+    buildCommand: npm install --legacy-peer-deps && npm run build
+    startCommand: npm start
+
+    # Health check configuration
+    healthCheckPath: /
+
+    # Auto-deploy configuration
+    autoDeploy: false # Manual deploys for production safety
+
+    # Environment configuration
+    envVars:
+      # Node.js runtime
+      - key: NODE_VERSION
+        value: 18
+
+      - key: NODE_ENV
+        value: production
+
+      # Service configuration
+      - key: PORT
+        value: 3030
+
+      - key: NEXT_PUBLIC_SERVICE_NAME
+        value: creative-studio
+
+      - key: NEXT_PUBLIC_MAIN_APP_URL
+        value: https://design-rite.com
+
+      # Supabase configuration (shared database)
+      - key: NEXT_PUBLIC_SUPABASE_URL
+        value: https://aeorianxnxpxveoxzhov.supabase.co
+
+      - key: NEXT_PUBLIC_SUPABASE_ANON_KEY
+        sync: false # Set manually in Render dashboard for security
+
+      - key: SUPABASE_SERVICE_KEY
+        sync: false # Set manually in Render dashboard for security
+
+      # OpenAI configuration
+      - key: OPENAI_API_KEY
+        sync: false # Set manually in Render dashboard for security
+
+      - key: CREATIVE_ASSISTANT_ID
+        value: asst_ybxoe2JxhEOobS84D7VnCGJj
+
+      # Optional: Add these if integrating with other services
+      # - key: MCP_SERVER_URL
+      #   value: https://mcp-harvester.onrender.com
+
+      # - key: SPATIAL_STUDIO_URL
+      #   value: https://spatial-studio.onrender.com
+
+      # CORS configuration (if needed)
+      - key: ALLOWED_ORIGINS
+        value: https://design-rite.com,https://portal.design-rite.com
+
+      # Feature flags
+      - key: ENABLE_AI_GENERATION
+        value: true
+
+      - key: ENABLE_TEMPLATE_LIBRARY
+        value: true
+
+      # Asset storage configuration
+      - key: STORAGE_BUCKET_NAME
+        value: creative-assets
+
+      # Performance tuning
+      - key: MAX_FILE_SIZE_MB
+        value: 50
+
+      - key: IMAGE_OPTIMIZATION
+        value: true
+
+# Database initialization notes:
+# ================================
+# Before first deployment:
+# 1. Ensure Supabase project is set up at https://supabase.com
+# 2. Run the SQL initialization script:
+#    - Navigate to Supabase SQL Editor
+#    - Execute: supabase/creative_studio_tables.sql
+# 3. Create storage bucket 'creative-assets':
+#    - Go to Storage in Supabase dashboard
+#    - Create new bucket named 'creative-assets'
+#    - Set to public or configure RLS policies as needed
+
+# Deployment instructions:
+# ========================
+# 1. Push this render.yaml to your GitHub repository
+# 2. In Render Dashboard:
+#    a. Click "New" -> "Blueprint"
+#    b. Connect your GitHub repository
+#    c. Select this render.yaml file
+#    d. Review and confirm settings
+# 3. Set sensitive environment variables manually:
+#    - NEXT_PUBLIC_SUPABASE_ANON_KEY
+#    - SUPABASE_SERVICE_KEY
+#    - OPENAI_API_KEY
+# 4. Deploy the service
+
+# Service endpoints:
+# ==================
+# Production: https://design-rite-creative-studio.onrender.com
+# Health Check: https://design-rite-creative-studio.onrender.com/
+# API Routes: https://design-rite-creative-studio.onrender.com/api/*
+
+# Monitoring:
+# ===========
+# - Check Render dashboard for deployment status
+# - Monitor logs for any build or runtime errors
+# - Set up alerts for service downtime
+
+# Scaling considerations:
+# =======================
+# Free tier limits:
+# - 512 MB RAM
+# - 0.1 CPU
+# - Spins down after 15 minutes of inactivity
+#
+# For production, consider upgrading to:
+# - Starter: $7/month (512 MB RAM, 0.5 CPU, no spin-down)
+# - Standard: $25/month (2 GB RAM, 1 CPU, better performance)
+
+# Integration with other services:
+# =================================
+# This service integrates with:
+# - Main Platform (design-rite.com) - for creative asset requests
+# - Supabase - for data storage and authentication
+# - OpenAI - for AI-powered creative generation
+# - Storage Bucket - for asset file storage
+
+# Troubleshooting:
+# ================
+# If build fails with peer dependency issues:
+# - Ensure --legacy-peer-deps flag is in build command
+# - Check Node version compatibility (18+)
+#
+# If service doesn't start:
+# - Verify all required environment variables are set
+# - Check Supabase connection and credentials
+# - Ensure database tables are initialized
+#
+# If AI generation fails:
+# - Verify OPENAI_API_KEY is valid
+# - Check CREATIVE_ASSISTANT_ID exists in OpenAI account
+# - Monitor OpenAI API rate limits
+
+# Version history:
+# ================
+# v0.1.0 - Initial deployment configuration
+# Created: January 2025
+# Service: Design-Rite Creative Studio
+# Framework: Next.js 15
+# Port: 3030
