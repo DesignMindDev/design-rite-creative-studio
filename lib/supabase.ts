@@ -34,5 +34,13 @@ export function getSupabaseClient() {
   return createClient(supabaseUrl, supabaseAnonKey)
 }
 
-// Export singleton instance for direct import
-export const supabaseAdmin = getSupabaseAdmin()
+// Export singleton instance for direct import (lazy-loaded to avoid build errors)
+let _cachedSupabaseAdmin: ReturnType<typeof createClient> | null = null
+export const supabaseAdmin = new Proxy({} as ReturnType<typeof createClient>, {
+  get(target, prop) {
+    if (!_cachedSupabaseAdmin) {
+      _cachedSupabaseAdmin = getSupabaseAdmin()
+    }
+    return (_cachedSupabaseAdmin as any)[prop]
+  }
+})

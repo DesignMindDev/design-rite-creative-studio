@@ -37,7 +37,7 @@ export async function GET(request: NextRequest) {
       )
     }
 
-    const { data: messages, error } = await supabaseAdmin
+    const { data: messages, error } = await (supabaseAdmin as any)
       .from('chat_messages')
       .select(`
         id,
@@ -61,7 +61,7 @@ export async function GET(request: NextRequest) {
     }
 
     // Transform to match frontend interface
-    const transformedMessages: ChatMessageResponse[] = (messages || []).map(msg => ({
+    const transformedMessages: ChatMessageResponse[] = (messages || []).map((msg: any) => ({
       id: msg.id,
       projectId: msg.project_id,
       role: msg.role,
@@ -129,7 +129,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Create chat message
-    const { data: message, error } = await supabaseAdmin
+    const { data: message, error } = await (supabaseAdmin as any)
       .from('chat_messages')
       .insert({
         project_id: body.projectId,
@@ -215,7 +215,7 @@ export async function DELETE(request: NextRequest) {
       )
     }
 
-    let query = supabaseAdmin
+    let query = (supabaseAdmin as any)
       .from('chat_messages')
       .delete()
       .eq('project_id', projectId)
