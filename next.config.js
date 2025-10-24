@@ -1,4 +1,6 @@
 /** @type {import('next').NextConfig} */
+const path = require('path')
+
 const nextConfig = {
   reactStrictMode: true,
   images: {
@@ -11,6 +13,14 @@ const nextConfig = {
   eslint: {
     // Temporarily ignore ESLint errors during build
     ignoreDuringBuilds: true,
+  },
+  webpack: (config) => {
+    // Add path alias resolution for webpack
+    config.resolve.alias = {
+      ...config.resolve.alias,
+      '@': path.resolve(__dirname),
+    }
+    return config
   },
 }
 
