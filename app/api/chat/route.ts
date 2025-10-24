@@ -152,16 +152,17 @@ export async function POST(request: NextRequest) {
     // Log conversation to Supabase (non-blocking) - only for assistant messages
     if (body.role === 'assistant') {
       const sessionId = body.projectId || generateSessionId()
-      const userHash = generateUserHash(request)
-      logAIConversation({
-        sessionId,
+      const userHash = generateUserHash(request.headers.get('x-forwarded-for') || 'anonymous')
+      logAIConversation(supabaseAdmin, {
+        userId: undefined,
         userHash,
-        userMessage: 'User message from chat history',
-        aiResponse: body.content,
-        aiProvider: body.provider || 'creative-studio',
-        metadata: {
+        sessionId,
+        provider: body.provider || 'creative-studio',
+        messageCount: 1,
+        conversationContext: {
           feature: 'creative-studio-chat',
-          projectId: body.projectId
+          projectId: body.projectId,
+          content: body.content
         }
       }).catch(err => console.error('[Creative Studio Chat] Logging error:', err))
     }
